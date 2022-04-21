@@ -22,7 +22,7 @@
             ('replace', 'mass_mailing/static/src/js/unsubscribe.js','mass_mailing_custom_unsubscribe/static/src/js/unsubscribe.js'),
         ],
     },
-    "demo": ["demo/assets.xml"],
+    "demo": [],
     "images": ["images/form.png"],
     "author": "Tecnativa, Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/social",
