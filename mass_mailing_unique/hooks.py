@@ -20,6 +20,7 @@ def pre_init_hook(cr):
         """
           SELECT email_normalized, COUNT(id) as count
           FROM mailing_contact
+          WHERE email_normalized is not null
           GROUP BY email_normalized
           HAVING COUNT(id) > 1
       """
