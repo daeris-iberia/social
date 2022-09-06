@@ -40,7 +40,8 @@ class MassMailingList(models.Model):
         # Skip non-dynamic lists
         dynamic = self.filtered("dynamic").with_context(syncing=True)
         for one in dynamic:
-            sync_domain = [('is_blacklisted', '=', False), ('email', '!=', False)] + safe_eval(one.sync_domain)
+            #sync_domain = [('is_blacklisted', '=', False), ('email', '!=', False)] + safe_eval(one.sync_domain)
+            sync_domain = [('is_blacklisted', '=', False)] + safe_eval(one.sync_domain)
             desired_partners = Partner.search(sync_domain)
             # Detach or remove undesired contacts when synchronization is full
             if one.sync_method == "full":
