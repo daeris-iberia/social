@@ -25,6 +25,9 @@ class MailingContactSubscription(models.Model):
         record = self.new(vals)
         if record.list_id.partner_mandatory and not record.contact_id.partner_id:
             m_partner = self.env["res.partner"]
-            partner_vals = {'name': record.contact_id.display_name,'email': record.contact_id.email_normalized ,'category_id': record.list_id.partner_category}
+            if not record.contact_id.name and not record.contact_id.email:
+                partner_vals = {'name': record.contact_id.mobile,'email': record.contact_id.email_normalized ,'category_id': record.list_id.partner_category,'mobile': record.contact_id.mobile}
+            else:
+                partner_vals = {'name': record.contact_id.display_name,'email': record.contact_id.email_normalized ,'category_id': record.list_id.partner_category,'mobile': record.contact_id.mobile}
             record.contact_id.partner_id = m_partner.sudo().create(partner_vals)
         return super().create(vals)

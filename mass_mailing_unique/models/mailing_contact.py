@@ -13,5 +13,10 @@ class MailingContact(models.Model):
             "unique_email",
             "UNIQUE(email_normalized)",
             "There's already a contact with this email address",
+        ),
+        (
+            "unique_mobile",
+            "UNIQUE(mobile)",
+            "Ya existe un contacto con este número de móvil",
         )
     ]

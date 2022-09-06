@@ -14,7 +14,7 @@ class MailingContact(models.Model):
     _inherit = "mailing.contact"
 
     partner_id = fields.Many2one(
-        comodel_name="res.partner", string="Partner", domain=[("email", "!=", False)]
+        comodel_name="res.partner", string="Partner", domain=['|',("email", "!=", False),("mobile", "!=", False)]
     )
 
     @api.constrains("partner_id", "list_ids")
@@ -79,8 +79,9 @@ class MailingContact(models.Model):
 
     def _prepare_partner(self):
         return {
-            "name": self.name or self.email,
+            "name": self.name or self.email or self.mobile,
             "email": self.email,
+            "mobile": self.mobile,
             "country_id": self.country_id.id,
             "title": self.title_id.id,
             "company_name": self.company_name,
@@ -90,12 +91,22 @@ class MailingContact(models.Model):
 
     def _set_partner(self):
         self.ensure_one()
-        if not self.email:
+        if not self.email and not self.mobile:
             return
         m_partner = self.env["res.partner"]
         # Look for a partner with that email
-        email = self.email.strip()
-        partner = m_partner.search([("email", "=ilike", email)], limit=1)
+        if self.email:
+            email = self.email.strip()
+        if self.mobile:
+            mobile = self.mobile
+
+        if self.email and self.mobile:
+            partner = m_partner.search(['|',("email", "=ilike", email),("mobile", "=ilike", mobile)], limit=1)
+        elif self.email:
+            partner = m_partner.search([("email", "=ilike", email)], limit=1)
+        elif self.mobile:
+            partner = m_partner.search([("mobile", "=ilike", mobile)], limit=1)
+
         if partner:
             # Partner found
             self.partner_id = partner
