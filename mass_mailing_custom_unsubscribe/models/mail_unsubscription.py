@@ -50,6 +50,42 @@ class MailUnsubscription(models.Model):
         "(Un)subscriber",
         help="Who was subscribed or unsubscribed.",
     )
+    partner_id= fields.Many2one(
+        "res.partner",
+        "id",
+        ondelete="cascade",
+        help="Partner",
+    )
+    lead_id= fields.Many2one(
+        "crm.lead",
+        "id",
+        ondelete="cascade",
+        help="Lead",
+    )
+    registration_id= fields.Many2one(
+        "event.registration",
+        "id",
+        ondelete="cascade",
+        help="Registration",
+    )
+    applicant_id= fields.Many2one(
+        "hr.applicant",
+        "id",
+        ondelete="cascade",
+        help="Applicant",
+    )
+    order_id= fields.Many2one(
+        "sale.order",
+        "id",
+        ondelete="cascade",
+        help="Order",
+    )
+    list_id= fields.Many2one(
+        "mailing.contact",
+        "id",
+        ondelete="cascade",
+        help="Track",
+    )
     mailing_list_ids = fields.Many2many(
         comodel_name="mailing.list",
         string="Mailing lists",
@@ -114,8 +150,43 @@ class MailUnsubscription(models.Model):
         # No reasons for subscriptions
         if vals.get("action") in {"subscription", "blacklist_rm"}:
             vals = dict(vals, reason_id=False, details=False)
+
+        if vals.get("unsubscriber_id"):
+            modelo = vals.get("unsubscriber_id").split(',')[0]
+            identificador = vals.get("unsubscriber_id").split(',')[1]
+            if modelo == 'res.partner':
+                vals = dict(vals, partner_id= int(identificador))
+            elif modelo == 'crm.lead':
+                vals = dict(vals, lead_id=int(identificador))
+            elif modelo == 'event.registration':
+                vals = dict(vals, registration_id=int(identificador))
+            elif modelo == 'hr.applicant':
+                vals = dict(vals, applicant_id=int(identificador))
+            elif modelo == 'sale.order':
+                vals = dict(vals, order_id=int(identificador))
+            elif modelo == 'mailing.contact':
+                vals = dict(vals, list_id=int(identificador))
+
         return super().create(vals)
 
+    def write(self, vals):
+        if vals.get("unsubscriber_id"):
+            modelo = vals.get("unsubscriber_id").split(',')[0]
+            identificador = vals.get("unsubscriber_id").split(',')[1]
+            if modelo == 'res.partner':
+                vals = dict(vals, partner_id= int(identificador))
+            elif modelo == 'crm.lead':
+                vals = dict(vals, lead_id=int(identificador))
+            elif modelo == 'event.registration':
+                vals = dict(vals, registration_id=int(identificador))
+            elif modelo == 'hr.applicant':
+                vals = dict(vals, applicant_id=int(identificador))
+            elif modelo == 'sale.order':
+                vals = dict(vals, order_id=int(identificador))
+            elif modelo == 'mailing.contact':
+                vals = dict(vals, list_id=int(identificador))
+        res = super(MailUnsubscription, self).write(vals)
+        return res
 
 class MailUnsubscriptionReason(models.Model):
     _name = "mail.unsubscription.reason"
