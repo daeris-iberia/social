@@ -25,3 +25,15 @@ class MassMailingContact(models.Model):
                     "a manual sync instead."
                 )
             )
+
+    @api.model
+    def create(self, vals):
+        if vals.get("partner_id"):
+            modelo = vals.get("mobile")
+            partner = self.env['res.partner'].search([('id', '=', vals.get("partner_id"))])
+            if partner:
+                mobile = partner.mobile
+                if not modelo and mobile:
+                    vals = dict(vals, mobile= mobile)
+
+        return super().create(vals)
