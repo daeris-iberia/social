@@ -52,37 +52,37 @@ class MailUnsubscription(models.Model):
     )
     partner_id= fields.Many2one(
         "res.partner",
-        "id",
+        "partner_id",
         ondelete="cascade",
         help="Partner",
     )
     lead_id= fields.Many2one(
         "crm.lead",
-        "id",
+        "lead_id",
         ondelete="cascade",
         help="Lead",
     )
     registration_id= fields.Many2one(
         "event.registration",
-        "id",
+        "registration_id",
         ondelete="cascade",
         help="Registration",
     )
     applicant_id= fields.Many2one(
         "hr.applicant",
-        "id",
+        "applicant_id",
         ondelete="cascade",
         help="Applicant",
     )
     order_id= fields.Many2one(
         "sale.order",
-        "id",
+        "order_id",
         ondelete="cascade",
         help="Order",
     )
     list_id= fields.Many2one(
         "mailing.contact",
-        "id",
+        "list_id",
         ondelete="cascade",
         help="Track",
     )
