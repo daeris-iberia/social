@@ -7,7 +7,7 @@
     "summary": "Know and track (un)subscription reasons, GDPR compliant",
     "category": "Marketing",
     "version": "14.0.1.0.0",
-    "depends": ["mass_mailing","mass_mailing_partner"],
+    "depends": ["mass_mailing","mass_mailing_partner","sale"],
     "data": [
         "security/ir.model.access.csv",
         "data/mail_unsubscription_reason.xml",
